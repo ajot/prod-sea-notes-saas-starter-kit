@@ -1,5 +1,14 @@
 import { ServiceConfigStatus, ConfigurableService } from '../status/serviceConfigStatus';
 
+/**
+ * Email attachment interface for local (in-memory) file attachments.
+ * This implementation uses the local attachment approach where file content 
+ * is sent directly as Buffer objects, not remote URLs.
+ * 
+ * @property filename - Name of the file as it will appear in the email
+ * @property content - In-memory file content as Buffer (local attachment)
+ * @property contentType - MIME type of the attachment (e.g., 'application/pdf')
+ */
 export interface EmailAttachment {
   filename: string;
   content: Buffer;

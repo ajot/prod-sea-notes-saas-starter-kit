@@ -131,6 +131,8 @@ async function generateInvoiceHandler(
     const generatedInvoice = await invoiceService.generateInvoice(invoiceData);
     
     // Generate PDF for email attachment
+    // Note: PDF is generated in-memory as a Buffer (local attachment approach)
+    // The PDF is not saved to disk or uploaded to external storage
     let pdfBuffer: Buffer | null = null;
     let pdfFilename: string | null = null;
     
@@ -138,6 +140,7 @@ async function generateInvoiceHandler(
       const pdfAvailable = await pdfService.isAvailable();
       
       if (pdfAvailable) {
+        // Generate PDF in memory using Puppeteer
         pdfBuffer = await pdfService.generateInvoicePDF(generatedInvoice.html);
         pdfFilename = `invoice-${invoiceData.invoiceNumber}-${userDetails.name.replace(/\s+/g, '-')}.pdf`;
       }
@@ -150,12 +153,14 @@ async function generateInvoiceHandler(
     
     if (emailService.isEmailEnabled()) {
       // Prepare email attachments
+      // Using local attachment approach: PDF Buffer is attached directly to the email
+      // The attachment is sent as base64-encoded content, not as a remote URL
       const attachments = [];
       
       if (pdfBuffer && pdfFilename) {
         attachments.push({
           filename: pdfFilename,
-          content: pdfBuffer,
+          content: pdfBuffer,  // In-memory Buffer object (local attachment)
           contentType: 'application/pdf'
         });
       }

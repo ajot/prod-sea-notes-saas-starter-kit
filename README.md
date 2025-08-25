@@ -41,7 +41,7 @@ This is a production-ready SaaS Starter Kit for developers who want to build and
 
 - ✅ Built-in login/auth with NextAuth  
 - ✅ Forgot password + magic link login  
-- ✅ Email notifications via Resend.com  
+- ✅ Email notifications via Resend.com (with PDF invoice attachments)  
 - ✅ Stripe billing (upgrade/cancel plan)  
 - ✅ File uploads to DigitalOcean Spaces  
 - ✅ PostgreSQL via Prisma ORM  
@@ -230,6 +230,15 @@ The basic version of SeaNotes is now set up locally on your computer! You can st
 By default, email functionality is disabled for local development, allowing you to sign up and log in without setting up an email provider. However, features like password reset and magic links won't work until email is configured.
 
 This starter kit comes with [Resend](https://resend.com) integration built-in. All you need to do is get your API key and a verified sender email address from Resend, and add them to your `.env` file.
+
+### Email Features
+
+The Resend integration supports:
+- **Transactional emails**: Signup verification, password reset, magic links
+- **Invoice generation with PDF attachments**: Automatically generates and attaches PDF invoices to billing emails
+- **React-based email templates**: Consistent styling using React Email components
+
+> **Note on Attachments**: The email service uses local (in-memory) attachments. PDFs and other files are generated on-the-fly as Buffer objects and attached directly to emails. Files are not saved to disk or fetched from external URLs. This approach ensures fast, secure attachment handling without requiring external storage.
 
 ### Steps:
 

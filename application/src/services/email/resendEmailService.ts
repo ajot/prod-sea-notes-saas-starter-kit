@@ -58,6 +58,17 @@ export class ResendEmailService extends EmailService {
     return serverConfig.enableEmailIntegration;
   }
 
+  /**
+   * Sends an email with React components as the body and optional attachments.
+   * 
+   * @param to - Recipient email address
+   * @param subject - Email subject line
+   * @param body - React component to render as email body
+   * @param attachments - Optional array of local file attachments (in-memory Buffers)
+   *                      Note: Uses local attachment approach - file content is sent directly as base64.
+   *                      Remote URL attachments are not supported.
+   * @throws Error if email client is not initialized or sending fails
+   */
   async sendReactEmail(
     to: string, 
     subject: string, 
@@ -90,10 +101,12 @@ export class ResendEmailService extends EmailService {
       };
 
       // Add attachments if provided
+      // Note: This implementation uses local attachments only (in-memory Buffers)
+      // Remote URL attachments are not currently supported
       if (attachments && attachments.length > 0) {
         emailData.attachments = attachments.map(attachment => ({
           filename: attachment.filename,
-          content: attachment.content.toString('base64'), // Convert Buffer to base64
+          content: attachment.content.toString('base64'), // Convert local Buffer to base64 for Resend API
           contentType: attachment.contentType,
         }));
       }
